@@ -1,0 +1,17 @@
+﻿@page
+@model RAZOR_EF.Pages.ArticleModel
+@{
+    ViewData["Title"] = "Articles";
+}
+<h1 class="text-center">@ViewData["Title"]</h1>
+
+@* <p>Use this page to detail your site's privacy policy.</p> *@
+@if (@Model.blogDbContext != null)
+{
+<div class="row">
+@foreach (var article in @Model.blogDbContext.Article)
+{
+    <partial name="_Article" model="article"/>
+}
+</div>
+}

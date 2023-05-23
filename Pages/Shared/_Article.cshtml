@@ -1,0 +1,27 @@
+@using RAZOR_EF.Models
+@model Article
+
+<div class="card mx-1 my-4" style="width: 20rem; border-color: transparent"> 
+   <div class="card-header bg-success text-light"><strong>@Model.Title</strong></div>
+   <div class="card-body bg-light">
+        <p class="text-secondary">@Model.CreatedTime.ToShortDateString()</p>
+        <p>@Model.Content</p>
+   </div>
+   <div style="background-color: #ececec;">
+        <button class="btn btn-primary m-2" style="float: right; width: 5.5rem" onclick="liked(this)"><strong>Like ❤️</strong></button>
+        <p style="float: left; padding-left: 15px; padding-top: 15px; width: 5.5rem"><strong>@Model.Content.Length.ToString() ❤️</strong></p>
+   </div>
+</div>
+
+<script>
+function liked(element){
+    if (element.textContent == "Like ❤️"){
+        element.textContent = "Liked"; 
+        element.className = "btn btn-secondary m-2"
+    }
+    else{
+        element.textContent = "Like ❤️"; 
+        element.className = "btn btn-primary m-2"
+    }
+}
+</script>
