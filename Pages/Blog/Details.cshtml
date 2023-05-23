@@ -1,0 +1,15 @@
+@page
+@model RAZOR_EF.Pages_Blog.DetailsModel
+@{
+    ViewData["Title"] = @Model.Article.Title;
+}
+<h1>@Model.Article.Title</h1>
+<p class="text-secondary">@Model.Article.CreatedTime.ToShortDateString()</p>
+<div style="margin-bottom: 20px;">
+<hr/>
+@Html.Raw(@Model.Article.Content)
+</div>
+<div>
+    <a class="btn btn-outline-secondary" asp-page="./Index">@("< Back")</a>
+    <a asp-page="./Edit" asp-route-id="@Model.Article.Id" class="btn btn-outline-warning mx-2" >Edit</a>
+</div>

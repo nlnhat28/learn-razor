@@ -11,7 +11,8 @@ public class Program
 
         // Add services to the container.
         builder.Services.AddRazorPages();
-        builder.Services.AddDbContext<BlogDbContext>(options => {
+        builder.Services.AddDbContext<BlogDbContext>(options =>
+        {
             var connectionString = builder.Configuration.GetConnectionString("BlogDbConnectionString");
             options.UseSqlServer(connectionString);
         });
@@ -63,5 +64,15 @@ public class Program
     - DI PageModel:
         public IndexModel(BlogDbContext _dbcontext){...}
 
+    - Create CRUD Pages:
+        + dotnet aspnet-codegenerator razorpage -m Article -dc ArticleContext -udl -outDir Pages/Blog --referenceScriptLibraries
 
+    - Paging
+        + Helpers/PagingModel.cs
+                . currentPage
+                . countPages
+                . generateUrl = (int? pageNumber) => @Url.Page("/Blog/Index", new {Search = Search, p = pageNumber}) 
+        + [BindProperty(SupportsGet = true, Name = "p")]
+        + countPages = Math.Min(Article.Count, (int)Math.Ceiling((double)Article.Count / itemPerPage));
+        
 */
