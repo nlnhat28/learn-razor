@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -19,6 +20,7 @@ namespace RAZOR_EF.Models
 
         [Required]
         [DataType(DataType.DateTime)]
+        [DisplayName("Created time")]
         public DateTime CreatedTime { get; set; }
 
         [Column(TypeName = "nvarchar(max)")]

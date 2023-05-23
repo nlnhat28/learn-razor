@@ -49,7 +49,7 @@ namespace RAZOR_EF.Migrations
 
             // Use Bogus
             Randomizer.Seed = new Random(8675309);
-            var fake = new Faker<Article>("en_US");
+            var fake = new Faker<Article>("en");
             fake.RuleFor(a => a.Title, f => f.Lorem.Sentence(5, 5));
             fake.RuleFor(a => a.CreatedTime, f => f.Date.Between(new DateTime(2000,1,1), DateTime.Now));
             fake.RuleFor(a => a.Content, f => f.Lorem.Paragraph(10));

@@ -1,0 +1,39 @@
+@page
+@model RAZOR_EF.Pages_Blog.EditModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+<h3>Edit</h3>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Article.Id" />
+            <div class="form-group my-2">
+                <label asp-for="Article.Title" class="control-label" style="font-weight: 500;"></label>
+                <input asp-for="Article.Title" class="form-control" />
+                <span asp-validation-for="Article.Title" class="text-danger"></span>
+            </div>
+            <div class="form-group my-2">
+                <label asp-for="Article.CreatedTime" class="control-label" style="font-weight: 500;"></label>
+                <input asp-for="Article.CreatedTime" class="form-control" />
+                <span asp-validation-for="Article.CreatedTime" class="text-danger"></span>
+            </div>
+            <div class="form-group my-2">
+                <label asp-for="Article.Content" class="control-label" style="font-weight: 500;"></label>
+                <textarea asp-for="Article.Content" class="form-control" style="height: 15rem;"></textarea>
+                <span asp-validation-for="Article.Content" class="text-danger"></span>
+            </div>
+            <div class="form-group my-2" style="display: flex; align-items: center;">
+                <a class="btn btn-outline-secondary" asp-page="./Index">@("< Back")</a>
+                <input type="submit" value="Save" class="btn btn-primary px-4" style="margin-left: auto;"/>
+            </div>
+        </form>
+    </div>    
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

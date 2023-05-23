@@ -1,0 +1,81 @@
+@page
+@using RAZOR_EF.Helpers
+@model RAZOR_EF.Pages_Blog.IndexModel
+
+@{
+    ViewData["Title"] = "Blog";
+}
+@{
+    // xây dựng Func phát sinh Url từ page ./Index
+    var pagingModel = new PagingModel(){
+        currentPage = @Model.currentPage,    // trang hiện tại
+        countPages  = @Model.countPages,     // tổng  số trang 
+        generateUrl = (int? pageNumber) => @Url.Page("/Blog/Index", new {Search = @Model.Search, p = pageNumber})
+    };
+}
+<h1>@ViewData["Title"]</h1>
+<div style="display: flex; align-items: center; margin: 20px 0px;">
+    <a class="btn btn-primary" asp-page="Create"><strong>+ New article</strong></a>
+    <form method="get" asp-page="./Index" style="margin-left: auto; display: flex; align-items: center;">
+        <input asp-for="@Model.Search" placeholder="Keyword of title"/>
+        <button class="btn btn-primary" type="submit" style="margin-left: 5px; padding: 2px 8px">Search</button>
+    </form>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Id
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Article[0].Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Article[0].CreatedTime)
+            </th>
+            <th class="px-3">
+                Action
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Article) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @if (!string.IsNullOrWhiteSpace(@Model.Search))
+                    {
+                        var markSearch = $@"<span style=""background-color: #ff8800;"">
+                            {@Model.Search}</span>";
+                        item.Title = item.Title.Replace(@Model.Search, markSearch, StringComparison.OrdinalIgnoreCase);
+                        @* item.Title = @Html.Raw(item.Title).ToString(); *@
+                }
+                @Html.Raw(item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedTime)
+            </td>
+            <td>
+                <a class="btn btn-outline-info px-2 mx-1" asp-page="./Details" asp-route-id="@item.Id">Detail</a>
+                <a class="btn btn-outline-warning px-2 mx-1" asp-page="./Edit" asp-route-id="@item.Id">Edit</a>
+                <a class="btn btn-outline-danger px-2 mx-1" asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+<div>
+    @if(@Model.Article.Count == 0){
+        <p class="alert alert-danger"><strong>No result for this keyword.</strong></p>
+    }
+    else
+    {
+        <p><strong>Total: @Model.TotalArticle</strong></p>
+    }
+</div>
+<div style="display: flex; justify-content: center; margin-top: 20px;">
+    <partial name="_Paging" model="@pagingModel"/>
+</div>
