@@ -456,3 +456,6 @@ $RECYCLE.BIN/
 
 # SDK
 global.json
+
+# OAuth google
+oauth-google.json

@@ -69,7 +69,7 @@ namespace RAZOR_EF.Areas.Identity.Pages.Account
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [Required]
-            [DisplayName("Username or email")]
+            [DisplayName("Username or Email")]
             public string UserNameOrEmail { get; set; }
 
             /// <summary>
@@ -120,7 +120,7 @@ namespace RAZOR_EF.Areas.Identity.Pages.Account
                     user = await _userManager.FindByEmailAsync(Input.UserNameOrEmail);
                 if (user == null)
                 {
-                    ModelState.AddModelError(string.Empty, "Username or email is not registered for any account");
+                    ModelState.AddModelError(string.Empty, "Username or Email is not registered for any account");
                     return Page();
                 }
                 userName = user.UserName;
