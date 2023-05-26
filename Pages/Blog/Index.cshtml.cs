@@ -9,9 +9,11 @@ using Microsoft.EntityFrameworkCore;
 using RAZOR_EF.Models;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RAZOR_EF.Pages_Blog
 {
+    [Authorize]
     public class IndexModel : PageModel
     {
         private readonly RAZOR_EF.Models.BlogDbContext _context;

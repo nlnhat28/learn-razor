@@ -1,8 +1,8 @@
-﻿@page
+﻿@page "/ConfirmEmail/"
 @model ConfirmEmailModel
 @{
     ViewData["Title"] = "Confirm email";
 }
 
-<h1>@ViewData["Title"]</h1>
 <partial name="_StatusMessage" model="Model.StatusMessage" />
+<a class="btn btn-primary" asp-area="" asp-page="/Index">@("< Back to home")</a>

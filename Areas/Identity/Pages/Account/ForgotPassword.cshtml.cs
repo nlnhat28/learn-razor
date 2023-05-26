@@ -3,6 +3,7 @@
 #nullable disable
 
 using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 using System.Text.Encodings.Web;
@@ -46,21 +47,22 @@ namespace RAZOR_EF.Areas.Identity.Pages.Account
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [Required]
-            [EmailAddress]
-            public string Email { get; set; }
+            [DisplayName("Username or Email")]
+            public string UserNameOrEmail { get; set; }
         }
-
         public async Task<IActionResult> OnPostAsync()
         {
             if (ModelState.IsValid)
             {
-                var user = await _userManager.FindByEmailAsync(Input.Email);
-                if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
+                // if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
+                var user = await _userManager.FindByNameAsync(Input.UserNameOrEmail);
+                if (user == null)
+                    user = await _userManager.FindByEmailAsync(Input.UserNameOrEmail);
+                if (user == null)
                 {
-                    // Don't reveal that the user does not exist or is not confirmed
-                    return RedirectToPage("./ForgotPasswordConfirmation");
+                    ModelState.AddModelError(string.Empty, "Username or email is not registered for any account");
+                    return Page();
                 }
-
                 // For more information on how to enable account confirmation and password reset please
                 // visit https://go.microsoft.com/fwlink/?LinkID=532713
                 var code = await _userManager.GeneratePasswordResetTokenAsync(user);
@@ -71,14 +73,14 @@ namespace RAZOR_EF.Areas.Identity.Pages.Account
                     values: new { area = "Identity", code },
                     protocol: Request.Scheme);
 
+                var email = user.Email;
                 await _emailSender.SendEmailAsync(
-                    Input.Email,
+                    email,
                     "Reset Password",
-                    $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'><strong>clicking here</strong></a>.");
 
                 return RedirectToPage("./ForgotPasswordConfirmation");
             }
-
             return Page();
         }
     }
