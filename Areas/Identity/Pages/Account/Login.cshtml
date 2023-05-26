@@ -6,36 +6,6 @@
     Layout = "/Pages/Shared/__Layout.cshtml";
 }
 <div class="row">
-    @* <div class="col-md-8">
-        <section>
-            <h3>Use another service to log in.</h3>
-            <hr />
-            @{
-                if ((Model.ExternalLogins?.Count ?? 0) == 0)
-                {
-                    <div>
-                        <p>
-                            There are no external authentication services configured. See this <a href="https://go.microsoft.com/fwlink/?LinkID=532715">article
-                            about setting up this ASP.NET application to support logging in via external services</a>.
-                        </p>
-                    </div>
-                }
-                else
-                {
-                    <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
-                        <div>
-                            <p>
-                                @foreach (var provider in Model.ExternalLogins)
-                                {
-                                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
-                                }
-                            </p>
-                        </div>
-                    </form>
-                }
-            }
-        </section>
-    </div> *@
     <div class="col-md-8 d-flex align-items-center" style="padding: 50px 25px 0px 25px;">
         <img src="/images/login-banner.png" style="max-height: 100%; max-width: 100%"/>
     </div>
@@ -67,24 +37,40 @@
                 </div>
                 <div>
                     <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary my-1">Log in</button>
-                </div>
-                <div class="text-center">
-                    <p class="m-0">or</p>
-                </div>
-                <div>
-                    <a asp-page="./Register" class="w-100 btn btn-lg btn-success my-1">Create a new account</a>
-                </div>
-                <div>
-                    <p>
-                    </p>
-                    @* <p>
-                        <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl" style="text-decoration: none;">Register as a new user</a>
-                    </p> *@
-                    @* <p>
-                        <a id="resend-confirmation" asp-page="./ResendEmailConfirmation" style="text-decoration: none;">Resend email confirmation</a>
-                    </p> *@
-                </div>
+                </div>            
             </form>
+            <div class="text-center">
+                <p class="m-0">or</p>
+            </div>
+            <div>
+                @if ((Model.ExternalLogins?.Count ?? 0) != 0)
+                {
+                    <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+                        <div>
+                            @foreach (var provider in Model.ExternalLogins)
+                            {                  
+                                <button type="submit" class="w-100 btn btn-lg btn-outline-dark my-1" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">
+                                    <img src="/Images/google-logo.png" style="margin-bottom: 5px; max-width: 20px; max-height: 20px"> 
+                                    Log in with @provider.DisplayName
+                                </button>
+                            }
+                        </div>
+                    </form>
+                }
+            </div>
+            <div>
+                <a asp-page="./Register" class="w-100 btn btn-lg btn-success my-1">Create a new account</a>
+            </div>
+            <div>
+                <p>
+                </p>
+                @* <p>
+                    <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl" style="text-decoration: none;">Register as a new user</a>
+                </p> *@
+                @* <p>
+                    <a id="resend-confirmation" asp-page="./ResendEmailConfirmation" style="text-decoration: none;">Resend email confirmation</a>
+                </p> *@
+            </div>
         </section>
     </div>
 </div>

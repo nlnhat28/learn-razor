@@ -54,12 +54,23 @@ public class Program
         builder.Services.Configure<MailSettings>(mailOptions);
         builder.Services.AddSingleton<IEmailSender, SendMailService>();
 
+        builder.Services.AddAuthentication().AddGoogle(options =>
+        {
+            var config = builder.Configuration.GetSection("Authentication:Google");
+            options.ClientId = config["ClientId"];
+            options.ClientSecret = config["ClientSecret"];
+            options.CallbackPath = "/LoginGoogle";
+        });
+
         builder.Services.ConfigureApplicationCookie(options =>
         {
             options.LoginPath = "/Login";
             options.LogoutPath = "/Logout";
             options.AccessDeniedPath = "/AccessDenied";
         });
+
+
+
 
         var app = builder.Build();
 
