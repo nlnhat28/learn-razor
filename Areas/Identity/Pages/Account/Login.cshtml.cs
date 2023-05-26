@@ -15,17 +15,20 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using RAZOR_EF.Models;
+using System.ComponentModel;
 
 namespace RAZOR_EF.Areas.Identity.Pages.Account
 {
     public class LoginModel : PageModel
     {
         private readonly SignInManager<AppUser> _signInManager;
+        private readonly UserManager<AppUser> _userManager;
         private readonly ILogger<LoginModel> _logger;
 
-        public LoginModel(SignInManager<AppUser> signInManager, ILogger<LoginModel> logger)
+        public LoginModel(SignInManager<AppUser> signInManager, UserManager<AppUser> userManager, ILogger<LoginModel> logger)
         {
             _signInManager = signInManager;
+            _userManager = userManager;
             _logger = logger;
         }
 
@@ -66,8 +69,8 @@ namespace RAZOR_EF.Areas.Identity.Pages.Account
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [Required]
-            [EmailAddress]
-            public string Email { get; set; }
+            [DisplayName("Username or email")]
+            public string UserNameOrEmail { get; set; }
 
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -103,17 +106,27 @@ namespace RAZOR_EF.Areas.Identity.Pages.Account
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
-        {
+        { 
             returnUrl ??= Url.Content("~/");
-
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
-
+            
             if (ModelState.IsValid)
             {
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
-                if (result.Succeeded)
+                var userName = "";
+                var user = await _userManager.FindByNameAsync(Input.UserNameOrEmail);
+                if (user == null) 
+                    user = await _userManager.FindByEmailAsync(Input.UserNameOrEmail);
+                if (user == null)
+                {
+                    ModelState.AddModelError(string.Empty, "Username or email is not registered for any account");
+                    return Page();
+                }
+                userName = user.UserName;
+                Console.WriteLine(userName);
+                var result = await _signInManager.PasswordSignInAsync(userName, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+                if (result.Succeeded) 
                 {
                     _logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);
@@ -129,11 +142,10 @@ namespace RAZOR_EF.Areas.Identity.Pages.Account
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    ModelState.AddModelError(string.Empty, "Password is incorrect");
                     return Page();
                 }
             }
-
             // If we got this far, something failed, redisplay form
             return Page();
         }

@@ -44,14 +44,22 @@ public class Program
             options.User.RequireUniqueEmail = true;  // Email là duy nhất
 
             // Cấu hình đăng nhập.
-            options.SignIn.RequireConfirmedEmail = true;            // Cấu hình xác thực địa chỉ email (email phải tồn tại)
+            options.SignIn.RequireConfirmedEmail = false;            // Cấu hình xác thực địa chỉ email (email phải tồn tại)
             options.SignIn.RequireConfirmedPhoneNumber = false;     // Xác thực số điện thoại
+            options.SignIn.RequireConfirmedAccount = false;          // Xác thực email mới cho đăng nhập
         });
 
         builder.Services.AddOptions();
         var mailOptions = builder.Configuration.GetSection("MailSettings");
         builder.Services.Configure<MailSettings>(mailOptions);
-        builder.Services.AddTransient<IEmailSender, SendMailService>();
+        builder.Services.AddSingleton<IEmailSender, SendMailService>();
+
+        builder.Services.ConfigureApplicationCookie(options =>
+        {
+            options.LoginPath = "/Login";
+            options.LogoutPath = "/Logout";
+            options.AccessDeniedPath = "/AccessDenied";
+        });
 
         var app = builder.Build();
 
@@ -77,39 +85,4 @@ public class Program
     }
 }
 
-/*
-    - DI options:
-        public BlogDbContext(DbContextOptions<BlogDbContext> options) : base(options) {} 
 
-    - Register service:
-        .AddDbContext<BlogDbContext>(options => {
-            var connectionString = builder.Configuration.GetConnectionString("BlogDbConnectionString");
-            options.UseSqlServer(connectionString);
-            });
-
-    - Save connection string in appsetting.json :
-        appsetting.json 
-            "ConnectionStrings": {
-                "BlogDbConnectionString" : "Server = NLNHAT\\NLNHAT; Database=BlogDb; UID=sa; PWD=052800; Encrypt=False"
-            }  
-    
-    - Insert data:
-        + migration_file => migrationBuilder.InsertData()
-
-        + Fake data : Nuget/Bogus
-
-    - DI PageModel:
-        public IndexModel(BlogDbContext _dbcontext){...}
-
-    - Create CRUD Pages:
-        + dotnet aspnet-codegenerator razorpage -m Article -dc ArticleContext -udl -outDir Pages/Blog --referenceScriptLibraries
-
-    - Paging
-        + Helpers/PagingModel.cs
-                . currentPage
-                . countPages
-                . generateUrl = (int? pageNumber) => @Url.Page("/Blog/Index", new {Search = Search, p = pageNumber}) 
-        + [BindProperty(SupportsGet = true, Name = "p")]
-        + countPages = Math.Min(Article.Count, (int)Math.Ceiling((double)Article.Count / itemPerPage));
-        
-*/
