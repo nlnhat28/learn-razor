@@ -459,3 +459,9 @@ global.json
 
 # OAuth google
 oauth-google.json
+
+# MailSave
+MailSave
+
+# Local file
+local-*

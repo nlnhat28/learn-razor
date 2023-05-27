@@ -59,8 +59,8 @@ namespace RAZOR_EF.Services
             catch (Exception ex)
             {
                 // Gửi mail thất bại, nội dung email sẽ lưu vào thư mục mailssave
-                System.IO.Directory.CreateDirectory("Mailssave");
-                var emailsavefile = string.Format(@"Mailssave/{0}.eml", Guid.NewGuid());
+                System.IO.Directory.CreateDirectory("MailSave");
+                var emailsavefile = string.Format(@"MailSave/{0}.eml", Guid.NewGuid());
                 await message.WriteToAsync(emailsavefile);
 
                 logger.LogInformation("Lỗi gửi mail, lưu tại - " + emailsavefile);
