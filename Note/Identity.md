@@ -84,3 +84,9 @@ public class SendMailService : IEmailSender {
 
 # Scaffold identity UI
 `dotnet aspnet-codegenerator identity -dc MyContext`
+
+# UserManager & SignInManager
+* Update profile
+```csharp
+await _userManager.UpdateAsync(user);
+```

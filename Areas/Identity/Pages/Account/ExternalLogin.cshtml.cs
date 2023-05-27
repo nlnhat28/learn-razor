@@ -86,7 +86,7 @@ namespace RAZOR_EF.Areas.Identity.Pages.Account
             [EmailAddress]
             public string Email { get; set; }
         }
-        
+
         public IActionResult OnGet() => RedirectToPage("./Login");
 
         public IActionResult OnPost(string provider, string returnUrl = null)
@@ -134,11 +134,10 @@ namespace RAZOR_EF.Areas.Identity.Pages.Account
                     {
                         Email = info.Principal.FindFirstValue(ClaimTypes.Email)
                     };
-                }
-                return Page();
+                };
             }
+            return Page();
         }
-
         public async Task<IActionResult> OnPostConfirmationAsync(string returnUrl = null)
         {
             returnUrl = returnUrl ?? Url.Content("~/");
@@ -153,9 +152,15 @@ namespace RAZOR_EF.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
+                var fullName = Input.Email;
+                if (info.Principal.HasClaim(c => c.Type == ClaimTypes.Name))
+                {
+                    fullName = info.Principal.FindFirstValue(ClaimTypes.Name);
+                };
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
+                user.FullName = fullName;
 
                 var result = await _userManager.CreateAsync(user);
                 if (result.Succeeded)
@@ -164,7 +169,7 @@ namespace RAZOR_EF.Areas.Identity.Pages.Account
                     if (result.Succeeded)
                     {
                         _logger.LogInformation("User created an account using {Name} provider.", info.LoginProvider);
-
+               
                         var userId = await _userManager.GetUserIdAsync(user);
                         var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                         code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));

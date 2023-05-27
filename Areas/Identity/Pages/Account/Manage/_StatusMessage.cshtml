@@ -2,9 +2,20 @@
 
 @if (!String.IsNullOrEmpty(Model))
 {
-    var statusMessageClass = Model.StartsWith("Error") ? "danger" : "success";
-    <div class="alert alert-@statusMessageClass alert-dismissible" role="alert">
+    var statusMessageClass = "success";
+    var message = Model;
+    if (Model.StartsWith("Error") || Model.EndsWith("-danger"))
+    {
+        statusMessageClass = "danger";
+        message = Model.Replace("-danger", "");
+    }
+    if (Model.StartsWith("Warning") || Model.EndsWith("-warning"))
+    {
+        statusMessageClass = "warning";
+        message = Model.Replace("-warning", "");
+    }
+    <div class="alert alert-@statusMessageClass alert-dismissible" role="alert">  
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        @Model
+        @message
     </div>
 }

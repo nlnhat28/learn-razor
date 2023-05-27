@@ -4,12 +4,14 @@
 
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using RAZOR_EF.Models;
+using RAZOR_EF.Validations;
 
 namespace RAZOR_EF.Areas.Identity.Pages.Account.Manage
 {
@@ -25,12 +27,6 @@ namespace RAZOR_EF.Areas.Identity.Pages.Account.Manage
             _userManager = userManager;
             _signInManager = signInManager;
         }
-
-        /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
-        public string Username { get; set; }
 
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -56,6 +52,20 @@ namespace RAZOR_EF.Areas.Identity.Pages.Account.Manage
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
+            [Required]
+            [StringLength(32, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 4)]
+            [DataType(DataType.Text)]
+            [Display(Name = "Username")]
+            public string UserName { get; set; }
+
+            [StringLength(255)]
+            [DisplayName("Full name")]
+            [DataType(DataType.Text)]
+            public string? FullName { get; set; }
+
+            [DisplayName("Birthday")]
+            [DataType(DataType.Date)]
+            public DateTime? Birthday { get; set; }
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
@@ -65,12 +75,15 @@ namespace RAZOR_EF.Areas.Identity.Pages.Account.Manage
         {
             var userName = await _userManager.GetUserNameAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
-
-            Username = userName;
+            var fullName = user.FullName;
+            var birthday = user.Birthday;
 
             Input = new InputModel
             {
-                PhoneNumber = phoneNumber
+                UserName = userName,
+                PhoneNumber = phoneNumber,
+                FullName = fullName,
+                Birthday = birthday
             };
         }
 
@@ -100,16 +113,41 @@ namespace RAZOR_EF.Areas.Identity.Pages.Account.Manage
                 return Page();
             }
 
+            var userName = await _userManager.GetUserNameAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
+            var inputUserName = Input.UserName;
+
+            if (inputUserName != userName)
+            {
+                var _user = await _userManager.FindByNameAsync(inputUserName);
+                if (_user != null) //Username is already taken.
+                {
+                    // StatusMessage = $"Username '{inputUserName}' is already taken.-danger";
+                    // return RedirectToPage();
+                    ModelState.AddModelError(string.Empty, $"Username '{inputUserName}' is already taken.");
+                    return Page();
+                }
+                var setUserNameResult = await _userManager.SetUserNameAsync(user, Input.UserName);
+                if (!setUserNameResult.Succeeded)
+                {
+                    StatusMessage = "Error when trying to set username.";
+                    return RedirectToPage();
+                }
+            }
+
             if (Input.PhoneNumber != phoneNumber)
             {
                 var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, Input.PhoneNumber);
                 if (!setPhoneResult.Succeeded)
                 {
-                    StatusMessage = "Unexpected error when trying to set phone number.";
+                    StatusMessage = "Error when trying to set phone number.";
                     return RedirectToPage();
                 }
             }
+            
+            user.FullName = Input.FullName;
+            user.Birthday = Input.Birthday;
+            await _userManager.UpdateAsync(user);
 
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Your profile has been updated";
