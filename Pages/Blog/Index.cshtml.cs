@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace RAZOR_EF.Pages_Blog
 {
-    [Authorize]
+    [Authorize(Roles = "Admin, Editor")]
     public class IndexModel : PageModel
     {
         private readonly RAZOR_EF.Models.BlogDbContext _context;

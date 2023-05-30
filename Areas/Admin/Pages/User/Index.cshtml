@@ -1,0 +1,117 @@
+@page
+@using Microsoft.AspNetCore.Identity;
+@using RAZOR_EF.Helpers
+@using RAZOR_EF.Models
+@model RAZOR_EF.Areas.Admin.User.IndexModel
+@inject UserManager<AppUser> userManager
+
+@{
+    ViewData["Title"] = "User";
+}
+@{
+    // xây dựng Func phát sinh Url từ page ./Index
+    var pagingModel = new PagingModel(){
+        currentPage = @Model.currentPage,    // trang hiện tại
+        countPages  = @Model.countPages,     // tổng  số trang 
+        generateUrl = (int? pageNumber) => @Url.Page("/User/Index", new {Search = @Model.Search, p = pageNumber})
+    };
+}
+<h3>@ViewData["Title"]</h3>
+<partial name="_StatusMessage" model="Model.StatusMessage"/>
+<div style="display: flex; align-items: center; margin: 20px 0px;">
+    <form method="get" asp-page="./Index" style="margin-right: auto; display: flex; align-items: center;">
+        <input asp-for="@Model.Search" placeholder="Keyword of username"/>
+        <button class="btn btn-primary" type="submit" style="margin-left: 5px; padding: 2px 8px">Search</button>
+    </form>
+</div>
+@if(@Model.Users.Count == 0)
+{
+    if(!string.IsNullOrWhiteSpace(@Model.Search)) // Search but no result
+    { 
+        <p class="alert alert-danger">No results for this keyword.</p>
+    }
+    else //No search and no result
+    {
+        <p class="alert alert-danger">No users have been created yet.</p>
+    }
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Users[0].UserName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Users[0].FullName)
+                </th>
+                <th>
+                    Roles
+                </th>
+                <th class="px-3">
+                    Action
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+    @foreach (var item in Model.Users) {
+            <tr>
+                <td>
+                    @if (!string.IsNullOrWhiteSpace(@Model.Search))
+                        {
+                            var markSearch = $@"<span style=""background-color: #ff8800;"">{@Model.Search}</span>";
+                            item.UserName = item.UserName.Replace(@Model.Search, markSearch, StringComparison.OrdinalIgnoreCase);
+                            @* item.Title = @Html.Raw(item.Title).ToString(); *@
+                    }
+                    @Html.Raw(item.UserName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FullName)
+                </td>
+                <td>
+                   @{
+                        var listRoles = (await userManager.GetRolesAsync(item)).ToArray();
+                        if (listRoles == null || listRoles.Count() == 0)
+                        {
+                            <p class="text-danger">No roles</p>
+                        }
+                        else
+                        {
+                            <p>@string.Join(", ", listRoles)</p>
+                        }
+                    }
+                </td>
+                <td>
+                    <a class="btn btn-outline-info px-2 mx-1" asp-page="./EditRole" asp-route-id="@item.Id">Edit role</a>
+                </td>
+            </tr>
+    }
+        </tbody>
+    </table>
+    <div>
+        <p><strong>Total: @Model.TotalUser</strong></p>
+    </div>
+    <div style="display: flex; justify-content: center; margin-top: 20px;">
+        <partial name="_Paging" model="@pagingModel"/>
+    </div>
+}
+@if (!string.IsNullOrWhiteSpace(@Model.Search))
+{
+    <a class="btn btn-outline-secondary" asp-page="./Index">@("< View all Users")</a>
+}
+@* @functions{
+    public async Task<string> GetRolesOfUser(AppUser user)
+    {
+        var listRoles = (await userManager.GetRolesAsync(user)).ToArray();
+        if (listRoles == null || listRoles.Count() == 0)
+        {
+            return "No roles";
+        }
+        else
+        {
+            return string.Join(", ", listRoles);
+        }
+    }
+} *@
+

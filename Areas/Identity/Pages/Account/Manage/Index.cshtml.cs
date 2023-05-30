@@ -66,9 +66,14 @@ namespace RAZOR_EF.Areas.Identity.Pages.Account.Manage
             [DisplayName("Birthday")]
             [DataType(DataType.Date)]
             public DateTime? Birthday { get; set; }
+
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
+
+            [DisplayName("Create time")]
+            [DataType(DataType.Date)]
+            public DateTime CreateTime { get; set; }
         }
 
         private async Task LoadAsync(AppUser user)
@@ -77,14 +82,16 @@ namespace RAZOR_EF.Areas.Identity.Pages.Account.Manage
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
             var fullName = user.FullName;
             var birthday = user.Birthday;
+            var createTime = user.CreateTime;
 
             Input = new InputModel
             {
                 UserName = userName,
                 PhoneNumber = phoneNumber,
                 FullName = fullName,
-                Birthday = birthday
-            };
+                Birthday = birthday,
+                CreateTime = createTime
+        };
         }
 
         public async Task<IActionResult> OnGetAsync()

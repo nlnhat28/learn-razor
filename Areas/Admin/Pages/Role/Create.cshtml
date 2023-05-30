@@ -1,0 +1,33 @@
+@page
+@model RAZOR_EF.Areas.Admin.Role.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+<h3>Create new role</h3>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group my-2">
+                <label asp-for="Role.Name" class="control-label" style="font-weight: 500;"></label>
+                <input asp-for="Role.Name" class="form-control" />
+                <span asp-validation-for="Role.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group my-2">
+                <label asp-for="Role.Description" class="control-label" style="font-weight: 500;"></label>
+                <textarea asp-for="Role.Description" class="form-control" style="height: 15rem;"></textarea>
+                <span asp-validation-for="Role.Description" class="text-danger"></span>
+            </div>
+            <div class="form-group my-4" style="display: flex; align-items: center;">
+                <a class="btn btn-outline-secondary" asp-page="./Index">@("< Back")</a>
+                <input type="submit" value="Create" class="btn btn-primary px-4" style="margin-left: auto;"/>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -20,7 +20,7 @@ public class Program
             var connectionString = builder.Configuration.GetConnectionString("BlogDbConnectionString");
             options.UseSqlServer(connectionString);
         });
-        builder.Services.AddIdentity<AppUser, IdentityRole>()
+        builder.Services.AddIdentity<AppUser, AppRole>()
                         .AddEntityFrameworkStores<BlogDbContext>()
                         .AddDefaultTokenProviders();
 
@@ -69,6 +69,12 @@ public class Program
             options.AccessDeniedPath = "/AccessDenied";
         });
 
+        builder.Services.Configure<SecurityStampValidatorOptions>(options =>
+        {
+            // Trên 30 giây truy cập lại sẽ nạp lại thông tin User (Role)
+            // SecurityStamp trong bảng User đổi -> nạp lại thông tinn Security
+            options.ValidationInterval = TimeSpan.FromSeconds(5);
+        });
 
 
 

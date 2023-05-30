@@ -1,29 +1,29 @@
 @page
 @using RAZOR_EF.Helpers
-@model RAZOR_EF.Pages_Blog.IndexModel
+@model RAZOR_EF.Areas.Admin.Role.IndexModel
 
 @{
-    ViewData["Title"] = "Blog";
+    ViewData["Title"] = "Role";
 }
 @{
     // xây dựng Func phát sinh Url từ page ./Index
     var pagingModel = new PagingModel(){
         currentPage = @Model.currentPage,    // trang hiện tại
         countPages  = @Model.countPages,     // tổng  số trang 
-        generateUrl = (int? pageNumber) => @Url.Page("/Blog/Index", new {Search = @Model.Search, p = pageNumber})
+        generateUrl = (int? pageNumber) => @Url.Page("/Role/Index", new {Search = @Model.Search, p = pageNumber})
     };
 }
-<h1>@ViewData["Title"]</h1>
+<h3>@ViewData["Title"]</h3>
 <div style="display: flex; align-items: center; margin: 20px 0px;">
-    <a class="btn btn-primary" asp-page="Create"><strong>+ New article</strong></a>
+    <a class="btn btn-primary" asp-page="Create"><strong>+ New role</strong></a>
     <form method="get" asp-page="./Index" style="margin-left: auto; display: flex; align-items: center;">
-        <input asp-for="@Model.Search" placeholder="Keyword of title"/>
+        <input asp-for="@Model.Search" placeholder="Keyword of role name"/>
         <button class="btn btn-primary" type="submit" style="margin-left: 5px; padding: 2px 8px">Search</button>
     </form>
 </div>
-@if(@Model.Article.Count == 0)
+@if(@Model.Roles.Count == 0)
 {
-    @if(!string.IsNullOrWhiteSpace(@Model.Search)) // Search but no result
+    if(!string.IsNullOrWhiteSpace(@Model.Search)) // Search but no result
     { 
         <p class="alert alert-danger">No results for this keyword.</p>
     }
@@ -38,13 +38,10 @@ else
         <thead>
             <tr>
                 <th>
-                    Id
+                    @Html.DisplayNameFor(model => model.Roles[0].Name)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Article[0].Title)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Article[0].CreatedTime)
+                    @Html.DisplayNameFor(model => model.Roles[0].Description)
                 </th>
                 <th class="px-3">
                     Action
@@ -52,25 +49,21 @@ else
             </tr>
         </thead>
         <tbody>
-    @foreach (var item in Model.Article) {
+    @foreach (var item in Model.Roles) {
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Id)
-                </td>
                 <td>
                     @if (!string.IsNullOrWhiteSpace(@Model.Search))
                         {
                             var markSearch = $@"<span style=""background-color: #ff8800;"">{@Model.Search}</span>";
-                            item.Title = item.Title.Replace(@Model.Search, markSearch, StringComparison.OrdinalIgnoreCase);
+                            item.Name = item.Name.Replace(@Model.Search, markSearch, StringComparison.OrdinalIgnoreCase);
                             @* item.Title = @Html.Raw(item.Title).ToString(); *@
                     }
-                    @Html.Raw(item.Title)
+                    @Html.Raw(item.Name)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.CreatedTime)
+                    @Html.DisplayFor(modelItem => item.Description)
                 </td>
                 <td>
-                    <a class="btn btn-outline-success px-2 mx-1" asp-page="./Details" asp-route-id="@item.Id">Detail</a>
                     <a class="btn btn-outline-info px-2 mx-1" asp-page="./Edit" asp-route-id="@item.Id">Edit</a>
                     <a class="btn btn-outline-danger px-2 mx-1" asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
                 </td>
@@ -79,7 +72,7 @@ else
         </tbody>
     </table>
     <div>
-        <p><strong>Total: @Model.TotalArticle</strong></p>
+        <p><strong>Total: @Model.TotalRole</strong></p>
     </div>
     <div style="display: flex; justify-content: center; margin-top: 20px;">
         <partial name="_Paging" model="@pagingModel"/>
@@ -87,5 +80,5 @@ else
 }
 @if (!string.IsNullOrWhiteSpace(@Model.Search))
 {
-    <a class="btn btn-outline-secondary" asp-page="./Index">@("< View all articles")</a>
+    <a class="btn btn-outline-secondary" asp-page="./Index">@("< View all roles")</a>
 }
