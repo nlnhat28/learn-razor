@@ -126,6 +126,7 @@ namespace RAZOR_EF.Areas.Identity.Pages.Account
 
                 await _userStore.SetUserNameAsync(user, Input.UserName, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
+                user.CreateTime = DateTime.Now;
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
                 if (result.Succeeded)

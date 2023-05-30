@@ -15,5 +15,8 @@ namespace RAZOR_EF.Models
         [DisplayName("Birthday")]
         [DataType(DataType.Date)]
         public DateTime? Birthday { get; set; }
+        
+        [DataType(DataType.DateTime)]
+        public DateTime CreateTime { get; set; }
     }
 }

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace RAZOR_EF.Models
 {
-    public class BlogDbContext : IdentityDbContext<AppUser>
+    public class BlogDbContext : IdentityDbContext<AppUser, AppRole, string>
     {
         public DbSet<Article> Article { get; set; }
 
