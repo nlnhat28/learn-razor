@@ -77,9 +77,13 @@
     <link rel="stylesheet" href="~/lib/multiple-select/multiple-select.min.css">
     <script>
         $("#id-select-roles").multipleSelect({
-            selectAll: false,
+            selectAll: true,
             keepOpen: false,
             isOpen: false,
+            placeholder: "No role selected",
+            formatSelectAll: function () {
+                return '[All]';
+            },
         })
     </script>
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
