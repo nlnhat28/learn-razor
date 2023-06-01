@@ -17,11 +17,12 @@ namespace RAZOR_EF.Areas.Admin.User
     {
         private readonly RoleManager<AppRole> _roleManager;
         private readonly UserManager<AppUser> _userManager;
-
-        public AddRoleModel(RoleManager<AppRole> roleManager, UserManager<AppUser> userManager)
+        private readonly BlogDbContext _context;
+        public AddRoleModel(RoleManager<AppRole> roleManager, UserManager<AppUser> userManager, BlogDbContext context)
         {
             _roleManager = roleManager;
             _userManager = userManager;
+            _context = context;
         }
 
         [BindProperty(SupportsGet = true)]
@@ -33,22 +34,45 @@ namespace RAZOR_EF.Areas.Admin.User
 
         public SelectList AllRoles { get; set; }
 
+        [DisplayName("Role claims")]
+        public List<IdentityRoleClaim<string>> RoleClaims { get; set; }
+
+        [DisplayName("User claims")]
+        public List<IdentityUserClaim<string>> UserClaims { get; set; }
+
         [TempData]
         public string StatusMessage { get; set;}
         
         public async Task<IActionResult> OnGetAsync(string id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
             User = await _userManager.Users.FirstOrDefaultAsync(r => r.Id == id);
 
-            if (User == null)
+            if (User == null) return NotFound();
+ 
+            var listRoles = await (from r in _context.Roles
+                                   from ur in _context.UserRoles
+                                   where r.Id == ur.RoleId
+                                   && User.Id == ur.UserId
+                                   select r).ToListAsync();
+
+            if (listRoles != null && listRoles.Count != 0)
             {
-                return NotFound();
+                RoleClaims = new();
+                foreach (var r in listRoles)
+                {
+                    var claims = await (from rc in _context.RoleClaims
+                                        where rc.RoleId == r.Id
+                                        select rc).ToListAsync();
+                    RoleClaims.AddRange(claims);
+                }
             }
+
+            UserClaims = await (from c in _context.UserClaims
+                                where c.UserId == User.Id
+                                select c).ToListAsync();
+
             Roles = (await _userManager.GetRolesAsync(User)).ToArray();
 
             var allRoles = await _roleManager.Roles.Select(r => r.Name).ToListAsync();

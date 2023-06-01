@@ -3,7 +3,7 @@
 @using RAZOR_EF.Helpers
 @using RAZOR_EF.Models
 @model RAZOR_EF.Areas.Admin.User.IndexModel
-@inject UserManager<AppUser> userManager
+@inject BlogDbContext _context
 
 @{
     ViewData["Title"] = "User";
@@ -49,6 +49,12 @@ else
                 <th>
                     Roles
                 </th>
+                <th>
+                    Role claims
+                </th>
+                <th>
+                    User claims
+                </th>
                 <th class="px-3">
                     Action
                 </th>
@@ -67,20 +73,23 @@ else
                     @Html.Raw(item.UserName)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.FullName)
+                    @if (string.IsNullOrEmpty(item.FullName))
+                    {
+                        <label class="text-danger">Not set yet</label>
+                    }
+                    else
+                    { 
+                        @item.FullName;
+                    }
                 </td>
                 <td>
-                   @{
-                        var listRoles = (await userManager.GetRolesAsync(item)).ToArray();
-                        if (listRoles == null || listRoles.Count() == 0)
-                        {
-                            <p class="text-danger">No roles</p>
-                        }
-                        else
-                        {
-                            <p>@string.Join(", ", listRoles)</p>
-                        }
-                    }
+                   @Html.Raw(item.stringRoles)
+                </td>
+                <td>
+                    @Html.Raw(item.stringRoleClaims)
+                </td>
+                <td>
+                    @Html.Raw(item.stringUserClaims)
                 </td>
                 <td>
                     <a class="btn btn-outline-info px-2 mx-1" asp-page="./EditRole" asp-route-id="@item.Id">Edit role</a>
@@ -100,18 +109,4 @@ else
 {
     <a class="btn btn-outline-secondary" asp-page="./Index">@("< View all Users")</a>
 }
-@* @functions{
-    public async Task<string> GetRolesOfUser(AppUser user)
-    {
-        var listRoles = (await userManager.GetRolesAsync(user)).ToArray();
-        if (listRoles == null || listRoles.Count() == 0)
-        {
-            return "No roles";
-        }
-        else
-        {
-            return string.Join(", ", listRoles);
-        }
-    }
-} *@
 

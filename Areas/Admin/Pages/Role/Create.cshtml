@@ -5,18 +5,17 @@
     ViewData["Title"] = "Create";
 }
 <h3>Create new role</h3>
-<hr />
 <div class="row">
     <div class="col-md-4">
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group my-2">
-                <label asp-for="Role.Name" class="control-label" style="font-weight: 500;"></label>
+            <div class="form-group my-4">
+                <label asp-for="Role.Name" class="form-label" style="font-weight: 500;"></label>
                 <input asp-for="Role.Name" class="form-control" />
                 <span asp-validation-for="Role.Name" class="text-danger"></span>
             </div>
-            <div class="form-group my-2">
-                <label asp-for="Role.Description" class="control-label" style="font-weight: 500;"></label>
+            <div class="form-group my-4">
+                <label asp-for="Role.Description" class="form-label" style="font-weight: 500;"></label>
                 <textarea asp-for="Role.Description" class="form-control" style="height: 15rem;"></textarea>
                 <span asp-validation-for="Role.Description" class="text-danger"></span>
             </div>

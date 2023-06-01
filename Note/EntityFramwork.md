@@ -38,3 +38,11 @@ public IndexModel(BlogDbContext _dbcontext)
 * `[BindProperty(SupportsGet = true, Name = "p")]`
 * `countPages = Math.Min(Article.Count, (int)Math.Ceiling((double)Article.Count / itemPerPage));`
         
+# Async linq
+```csharp
+public async Task OnGetProductAsync()
+{
+    var listRoles = await (from p in _context.Product
+                           select p).ToListAsync();
+}
+```
