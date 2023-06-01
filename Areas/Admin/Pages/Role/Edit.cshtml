@@ -5,20 +5,19 @@
     ViewData["Title"] = "Edit";
 }
 <h3>@ViewData["Title"]</h3>
-<hr />
 <div class="row">
     <div class="col-md-4">
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             @* <input type="hidden" asp-for="Input.Id" /> *@
-            <div class="form-group my-2">
-                <label asp-for="Input.Name" class="control-label" style="font-weight: 500;"></label>
+            <div class="form-group my-4">
+                <label asp-for="Input.Name" class="form-label" style="font-weight: 500;"></label>
                 <input asp-for="Input.Name" class="form-control" />
                 <span asp-validation-for="Input.Name" class="text-danger"></span>
             </div>
-            <div class="form-group my-2">
-                <label asp-for="Input.Description" class="control-label" style="font-weight: 500;"></label>
-                <textarea asp-for="Input.Description" class="form-control" style="height: 15rem;"></textarea>
+            <div class="form-group my-4">
+                <label asp-for="Input.Description" class="form-label" style="font-weight: 500;"></label>
+                <textarea asp-for="Input.Description" class="form-control" style="height: 10rem;"></textarea>
                 <span asp-validation-for="Input.Description" class="text-danger"></span>
             </div>
             <div class="form-group my-4" style="display: flex; align-items: center;">
@@ -26,6 +25,22 @@
                 <input type="submit" value="Save" class="btn btn-primary px-4" style="margin-left: auto;"/>
             </div>
         </form>
+        <div class="form-group my-2">
+            <partial name="_StatusMessage" model="@Model.StatusMessage"/>
+            <label asp-for="Claims" class="control-label" style="font-weight: 500;"></label>
+            <a class="btn-sm btn-primary" asp-page="./CreateClaim" asp-route-roleId="@Model.Role.Id" style="text-decoration: none">+ Add claim</a>
+            @if (@Model.Claims != null && @Model.Claims.Count != 0)
+            {
+                @foreach (var c in @Model.Claims)
+                {
+                    <li class="m-3"><a asp-page="./EditClaim" asp-route-claimId="@c.Id" style="text-decoration: none;">@($"{c.ClaimType}: {c.ClaimValue}")</a></li>
+                }
+            }    
+            else
+            {
+                <p class="text-danger m-2">No claim</p>
+            }   
+        </div>
     </div>    
 </div>
 

@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RAZOR_EF.Pages;
-
+[Authorize(Policy = "AllowEditPolicy")]
 public class PrivacyModel : PageModel
 {
     private readonly ILogger<PrivacyModel> _logger;

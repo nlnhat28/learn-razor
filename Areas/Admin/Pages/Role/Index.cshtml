@@ -1,7 +1,9 @@
 @page
 @using RAZOR_EF.Helpers
+@using RAZOR_EF.Models
+@using Microsoft.AspNetCore.Identity;
 @model RAZOR_EF.Areas.Admin.Role.IndexModel
-
+@inject RoleManager<AppRole> roleManager
 @{
     ViewData["Title"] = "Role";
 }
@@ -43,6 +45,9 @@ else
                 <th>
                     @Html.DisplayNameFor(model => model.Roles[0].Description)
                 </th>
+                <th>
+                    Claims
+                </th>
                 <th class="px-3">
                     Action
                 </th>
@@ -62,6 +67,20 @@ else
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @{
+                        var listClaims = await roleManager.GetClaimsAsync(item);
+                        var listClaimsName = listClaims.Select(c => $"{c.Type}: {c.Value}").ToList();
+                        if (listClaimsName == null || listClaimsName.Count() == 0)
+                        {
+                            <p class="text-danger">No claim</p>
+                        }
+                        else
+                        {
+                            <p>@string.Join(", ", listClaimsName)</p>
+                        }
+                    }
                 </td>
                 <td>
                     <a class="btn btn-outline-info px-2 mx-1" asp-page="./Edit" asp-route-id="@item.Id">Edit</a>

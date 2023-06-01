@@ -71,12 +71,26 @@ public class Program
 
         builder.Services.Configure<SecurityStampValidatorOptions>(options =>
         {
-            // Trên 30 giây truy cập lại sẽ nạp lại thông tin User (Role)
+            // Trên 5 giây truy cập lại sẽ nạp lại thông tin User (Role)
             // SecurityStamp trong bảng User đổi -> nạp lại thông tinn Security
             options.ValidationInterval = TimeSpan.FromSeconds(5);
         });
 
+        builder.Services.AddAuthorization(options =>
+        {
+            options.AddPolicy("AllowEditPolicy", policyBuilder =>
+            {
+                policyBuilder.RequireAuthenticatedUser();
+                // policyBuilder.RequireRole("Admin", "Editor");
+                // policyBuilder.RequireRole("Vip");
 
+                policyBuilder.RequireClaim("Vip", new string[]{
+                    "Blog",
+                    "Article",
+                    "Privacy"
+                });
+            });
+        });
 
         var app = builder.Build();
 
