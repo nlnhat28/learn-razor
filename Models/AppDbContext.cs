@@ -1,13 +1,13 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
-namespace RAZOR_EF.Models
+namespace App.Models
 {
-    public class BlogDbContext : IdentityDbContext<AppUser, AppRole, string>
+    public class AppDbContext : IdentityDbContext<AppUser, AppRole, string>
     {
         public DbSet<Article> Article { get; set; }
 
-        public BlogDbContext(DbContextOptions<BlogDbContext> options) : base(options) { }
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
     
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

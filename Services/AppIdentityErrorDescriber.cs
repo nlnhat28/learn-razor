@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 
-namespace RAZOR_EF.Services
+namespace App.Services
 {
     public class AppIdentityErrorDescriber : IdentityErrorDescriber
     {

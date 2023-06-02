@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Options;
 using MimeKit;
 
-namespace RAZOR_EF.Services
+namespace App.Services
 {
     // Cấu hình dịch vụ gửi mail, giá trị Inject từ appsettings.json
     public class MailSettings

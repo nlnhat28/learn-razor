@@ -6,9 +6,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using RAZOR_EF.Models;
+using App.Models;
 
-namespace RAZOR_EF.Areas.Admin.Role
+namespace App.Areas.Admin.Role
 {
     public class DeleteModel : PageModel
     {

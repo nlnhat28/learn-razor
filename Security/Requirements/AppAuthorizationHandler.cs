@@ -5,9 +5,9 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using RAZOR_EF.Models;
+using App.Models;
 
-namespace RAZOR_EF.Security.Requirements
+namespace App.Security.Requirements
 {
     public class AppAuthorizationHandler : IAuthorizationHandler
     {

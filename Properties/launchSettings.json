@@ -8,7 +8,7 @@
     }
   },
   "profiles": {
-    "RAZOR_EF": {
+    "App": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,

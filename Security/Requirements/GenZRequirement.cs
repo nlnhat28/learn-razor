@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 
-namespace RAZOR_EF.Security.Requirements
+namespace App.Security.Requirements
 {
     public class GenZRequirement : IAuthorizationRequirement
     {

@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace RAZOR_EF.Models
+namespace App.Models
 {
     public class Article
     {

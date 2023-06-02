@@ -4,9 +4,9 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
-using RAZOR_EF.Models;
+using App.Models;
 
-namespace RAZOR_EF.Validations
+namespace App.Validations
 {
     public class Unique : ValidationAttribute
     {

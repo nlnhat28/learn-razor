@@ -10,10 +10,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using RAZOR_EF.Models;
-using RAZOR_EF.Validations;
+using App.Models;
+using App.Validations;
 
-namespace RAZOR_EF.Areas.Identity.Pages.Account.Manage
+namespace App.Areas.Identity.Pages.Account.Manage
 {
     public class IndexModel : PageModel
     {

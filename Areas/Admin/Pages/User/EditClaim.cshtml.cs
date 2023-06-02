@@ -9,15 +9,15 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using RAZOR_EF.Models;
+using App.Models;
 
-namespace RAZOR_EF.Areas.Admin.User
+namespace App.Areas.Admin.User
 {
     public class EditClaimModel : PageModel
     {
         private readonly UserManager<AppUser> _userManager;
 
-        private readonly BlogDbContext _context;
+        private readonly AppDbContext _context;
         [TempData]
         public string StatusMessage { get; set; }
         [BindProperty]
@@ -32,7 +32,7 @@ namespace RAZOR_EF.Areas.Admin.User
             public string Value { get; set; }
         }
 
-        public EditClaimModel(UserManager<AppUser> userManager, BlogDbContext context)
+        public EditClaimModel(UserManager<AppUser> userManager, AppDbContext context)
         {
             _userManager = userManager;
             _context = context;

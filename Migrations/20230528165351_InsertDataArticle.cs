@@ -1,10 +1,10 @@
 ﻿using Bogus;
 using Microsoft.EntityFrameworkCore.Migrations;
-using RAZOR_EF.Models;
+using App.Models;
 
 #nullable disable
 
-namespace RAZOR_EF.Migrations
+namespace App.Migrations
 {
     public partial class InsertDataArticle : Migration
     {
