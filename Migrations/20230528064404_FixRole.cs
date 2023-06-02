@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace RAZOR_EF.Migrations
+namespace App.Migrations
 {
     public partial class FixRole : Migration
     {

@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Authorization;
 
-namespace RAZOR_EF.Pages;
+namespace App.Pages;
 [Authorize(Policy = "AllowEditPolicy")]
 public class PrivacyModel : PageModel
 {

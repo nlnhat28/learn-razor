@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 
-namespace RAZOR_EF.Models
+namespace App.Models
 {
     public class AppRole : IdentityRole
     {

@@ -1,11 +1,13 @@
 
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
-using RAZOR_EF.Models;
-using RAZOR_EF.Services;
+using App.Models;
+using App.Services;
 using Microsoft.AspNetCore.Identity;
+using App.Security.Requirements;
+using Microsoft.AspNetCore.Authorization;
 
-namespace RAZOR_EF;
+namespace App;
 
 public class Program
 {
@@ -15,13 +17,13 @@ public class Program
 
         // Add services to the container.
         builder.Services.AddRazorPages();
-        builder.Services.AddDbContext<BlogDbContext>(options =>
+        builder.Services.AddDbContext<AppDbContext>(options =>
         {
             var connectionString = builder.Configuration.GetConnectionString("BlogDbConnectionString");
             options.UseSqlServer(connectionString);
         });
         builder.Services.AddIdentity<AppUser, AppRole>()
-                        .AddEntityFrameworkStores<BlogDbContext>()
+                        .AddEntityFrameworkStores<AppDbContext>()
                         .AddDefaultTokenProviders();
 
         builder.Services.Configure<IdentityOptions>(options =>
@@ -90,7 +92,24 @@ public class Program
                     "Privacy"
                 });
             });
+            options.AddPolicy("ViewAllArticle", policyBuilder =>
+            {
+                policyBuilder.RequireAuthenticatedUser();
+                policyBuilder.AddRequirements(new GenZRequirement());
+            });
+            options.AddPolicy("ShowAdminMenu", policyBuilder =>
+            {
+                policyBuilder.RequireAuthenticatedUser();
+                policyBuilder.RequireRole("Admin");
+            });
+            options.AddPolicy("UpdateArticleRequirement", policyBuilder =>
+            {
+                policyBuilder.RequireAuthenticatedUser();
+                policyBuilder.AddRequirements(new UpdateArticleRequirement());
+            });
         });
+
+        builder.Services.AddTransient<IAuthorizationHandler, AppAuthorizationHandler>();
 
         var app = builder.Build();
 

@@ -1,11 +1,11 @@
 # DI options:
 ```csharp
-public BlogDbContext(DbContextOptions<BlogDbContext> options) : base(options) {} 
+public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) {} 
 ```
 
 # Register service:
 ```csharp
-builder.Services.AddDbContext<BlogDbContext>(options => {
+builder.Services.AddDbContext<AppDbContext>(options => {
     var connectionString = builder.Configuration.GetConnectionString("BlogDbConnectionString");
     options.UseSqlServer(connectionString);
     });
@@ -22,7 +22,7 @@ builder.Services.AddDbContext<BlogDbContext>(options => {
 
 # DI PageModel:
 ```csharp
-public IndexModel(BlogDbContext _dbcontext)
+public IndexModel(AppDbContext _dbcontext)
 {
     //
 }

@@ -2,21 +2,25 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using RAZOR_EF.Models;
+using App.Models;
 
-namespace RAZOR_EF.Pages_Blog
+namespace App.Pages_Blog
 {
+    [Authorize]
     public class EditModel : PageModel
     {
-        private readonly RAZOR_EF.Models.BlogDbContext _context;
+        private readonly AppDbContext _context;
+        private readonly IAuthorizationService _authorService;
 
-        public EditModel(RAZOR_EF.Models.BlogDbContext context)
+        public EditModel(App.Models.AppDbContext context, IAuthorizationService authorService)
         {
             _context = context;
+            _authorService = authorService;
         }
 
         [BindProperty]
@@ -47,11 +51,18 @@ namespace RAZOR_EF.Pages_Blog
                 return Page();
             }
 
-            _context.Attach(Article).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                if ((await _authorService.AuthorizeAsync(User, Article, "UpdateArticleRequirement")).Succeeded)
+                {
+                    _context.Attach(Article).State = EntityState.Modified;
+                    await _context.SaveChangesAsync();
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty,"Cannot update create time before year 2010");
+                    return Page();
+                }
             }
             catch (DbUpdateConcurrencyException)
             {

@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using RAZOR_EF.Models;
+using App.Models;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 
-namespace RAZOR_EF.Areas.Admin.Role
+namespace App.Areas.Admin.Role
 {
     [Authorize(Roles = "Admin")]
     [Authorize(Roles = "Editor")]

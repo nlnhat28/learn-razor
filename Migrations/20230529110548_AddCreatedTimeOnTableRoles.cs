@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace RAZOR_EF.Migrations
+namespace App.Migrations
 {
     public partial class AddCreatedTimeOnTableRoles : Migration
     {

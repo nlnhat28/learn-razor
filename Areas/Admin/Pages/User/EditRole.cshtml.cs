@@ -9,16 +9,16 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using RAZOR_EF.Models;
+using App.Models;
 
-namespace RAZOR_EF.Areas.Admin.User
+namespace App.Areas.Admin.User
 {
     public class AddRoleModel : PageModel
     {
         private readonly RoleManager<AppRole> _roleManager;
         private readonly UserManager<AppUser> _userManager;
-        private readonly BlogDbContext _context;
-        public AddRoleModel(RoleManager<AppRole> roleManager, UserManager<AppUser> userManager, BlogDbContext context)
+        private readonly AppDbContext _context;
+        public AddRoleModel(RoleManager<AppRole> roleManager, UserManager<AppUser> userManager, AppDbContext context)
         {
             _roleManager = roleManager;
             _userManager = userManager;

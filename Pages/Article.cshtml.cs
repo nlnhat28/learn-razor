@@ -1,17 +1,17 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using RAZOR_EF.Models;
+using App.Models;
 
-namespace RAZOR_EF.Pages
+namespace App.Pages
 {
-    [Authorize(Roles = "Admin, Editor, Vip")]
+    [Authorize(Policy = "ViewAllArticle")]
     public class ArticleModel : PageModel
     {
-        public BlogDbContext blogDbContext{ get; set; }
-        public ArticleModel (BlogDbContext _blogDbContext)
+        public AppDbContext AppDbContext{ get; set; }
+        public ArticleModel (AppDbContext _AppDbContext)
         {
-            blogDbContext = _blogDbContext;
+            AppDbContext = _AppDbContext;
         }
         public void OnGet()
         {

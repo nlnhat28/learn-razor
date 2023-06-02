@@ -5,13 +5,13 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using RAZOR_EF.Models;
+using App.Models;
 
 #nullable disable
 
-namespace RAZOR_EF.Migrations
+namespace App.Migrations
 {
-    [DbContext(typeof(BlogDbContext))]
+    [DbContext(typeof(AppDbContext))]
     [Migration("20230523041029_InitDb")]
     partial class InitDb
     {
@@ -25,7 +25,7 @@ namespace RAZOR_EF.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("RAZOR_EF.Models.Article", b =>
+            modelBuilder.Entity("App.Models.Article", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()

@@ -6,22 +6,22 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using RAZOR_EF.Models;
+using App.Models;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 
-namespace RAZOR_EF.Areas.Admin.User
+namespace App.Areas.Admin.User
 {
     [Authorize(Roles = "Admin")]
     [Authorize(Roles = "Editor")]
     public class IndexModel : PageModel
     {
         private readonly UserManager<AppUser> _userManager;
-        private readonly BlogDbContext _context;
-        public IndexModel(UserManager<AppUser> userManager, BlogDbContext context)
+        private readonly AppDbContext _context;
+        public IndexModel(UserManager<AppUser> userManager, AppDbContext context)
         {
             _userManager = userManager;
             _context = context;

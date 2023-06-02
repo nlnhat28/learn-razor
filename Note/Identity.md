@@ -27,12 +27,12 @@
 
 # Model
 * `IdentityUser`, inheritance: `AppUser : IdentityUser`
-* `IdentityDbContext`, inheritance: `BlogDbContext : IdentityDbContext<AppUser>`
+* `IdentityDbContext`, inheritance: `AppDbContext : IdentityDbContext<AppUser>`
 
 # Register services
 ```csharp
 builder.Services.AddIdentity<AppUser, IdentityRole>()
-                .AddEntityFrameworkStores<BlogDbContext>()
+                .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
 ```
 # ConfigIdentityOptions
