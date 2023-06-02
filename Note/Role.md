@@ -11,6 +11,10 @@ Services.AddIdentity<AppUser, AppRole>()...
 ```csharp
 var arrayRoles = (await _roleManager.GetRolesAsync(User)).ToArray<string>();
 ```
+* Check role
+```cs
+ if(user.IsInRole("Admin")); 
+ ```
 # Select list
 * class `SelectList(list)`
 ```csharp

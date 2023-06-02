@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using RAZOR_EF.Models;
 using RAZOR_EF.Services;
 using Microsoft.AspNetCore.Identity;
+using RAZOR_EF.Security.Requirements;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RAZOR_EF;
 
@@ -90,7 +92,24 @@ public class Program
                     "Privacy"
                 });
             });
+            options.AddPolicy("ViewAllArticle", policyBuilder =>
+            {
+                policyBuilder.RequireAuthenticatedUser();
+                policyBuilder.AddRequirements(new GenZRequirement());
+            });
+            options.AddPolicy("ShowAdminMenu", policyBuilder =>
+            {
+                policyBuilder.RequireAuthenticatedUser();
+                policyBuilder.RequireRole("Admin");
+            });
+            options.AddPolicy("UpdateArticleRequirement", policyBuilder =>
+            {
+                policyBuilder.RequireAuthenticatedUser();
+                policyBuilder.AddRequirements(new UpdateArticleRequirement());
+            });
         });
+
+        builder.Services.AddTransient<IAuthorizationHandler, AppAuthorizationHandler>();
 
         var app = builder.Build();
 

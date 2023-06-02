@@ -5,7 +5,7 @@ using RAZOR_EF.Models;
 
 namespace RAZOR_EF.Pages
 {
-    [Authorize(Roles = "Admin, Editor, Vip")]
+    [Authorize(Policy = "ViewAllArticle")]
     public class ArticleModel : PageModel
     {
         public BlogDbContext blogDbContext{ get; set; }

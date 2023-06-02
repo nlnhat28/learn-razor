@@ -1,0 +1,35 @@
+@* @using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService authorService
+
+@{
+    var isAdmin = await authorService.AuthorizeAsync(this.User, "ShowAdminMenu");
+}
+@if (isAdmin.Succeeded)
+{
+    <li class="nav-item dropdown-menu-dark">
+        <a class="nav-item nav-link dropdown-toggle mr-md-2" href="#" data-toggle="dropdown">
+            Admin
+        </a>
+        <div class="dropdown-menu dropdown-menu-dark">
+            <a class="dropdown-item" asp-area="Admin" asp-page="/Role/Index">Role</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" asp-area="Admin" asp-page="/User/Index">User</a>
+        </div>
+    </li>
+} *@
+@using Microsoft.AspNetCore.Identity
+@using RAZOR_EF.Models
+@using Microsoft.AspNetCore.Authorization
+@inject SignInManager<AppUser> SignInManager
+
+@inject Microsoft.AspNetCore.Authorization.IAuthorizationService authorizationService
+@if (SignInManager.IsSignedIn(User) 
+    && (await authorizationService.AuthorizeAsync(User, "ShowAdminMenu")).Succeeded)
+{
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="Admin" asp-page="/Role/Index">Role</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="Admin" asp-page="/User/Index">User</a>
+    </li>
+}
